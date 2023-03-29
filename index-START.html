@@ -60,8 +60,9 @@ when a letter is pushed the computer goes to audio data-key to to see what sound
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
-//listen for a key event 'keydown'//
-window.addEventList('keydown', function (e) {
+
+
+function playSound (e) {
   //is there a data-key(audio) that matches they keyboard key that was hit
   const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
   //select the corresponding key and add a little animation when the key is pressed
@@ -71,9 +72,19 @@ window.addEventList('keydown', function (e) {
   audio.currentTime = 0; //the zero allows it to play constantly when the button is hit
   //has the sound finish playing before it starts again, so it's kinda slow when you're pressing the key multiple times
   audio.play();
-
-
+  key.classlist.add('playing');
 });
+
+function removeTransition(e) {
+if (e.propertyName !== 'transform') return; //skip if it's not a transform
+this.classList.remove('playing');
+}
+
+const keys = document.querySelectorAll('.key');
+keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+//listen for a key event 'keydown'//
+window.addEventListener('keydown', playSound);
 
 </script>
 
